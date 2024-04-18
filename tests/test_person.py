@@ -40,10 +40,11 @@ def test_person_has_email():
     assert dao.person_has_email([valid_email]) is True
     assert dao.person_has_email([]) is False
 
-def test_is_email_valid():
+def test_is_email_valid(invalid_email):
     dao = PersonDAO()
     assert dao.is_email_valid("Rodrigo@Gmail.com") is True
     assert dao.is_email_valid("invalid_email") is False
+
 
 def test_is_age_valid():
     dao = PersonDAO()

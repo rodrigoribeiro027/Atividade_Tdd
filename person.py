@@ -1,5 +1,4 @@
-from typing import List, Tuple
-import re
+from typing import List
 
 class Person:
     def __init__(self, id: int, name: str, age):
@@ -22,19 +21,16 @@ class PersonDAO:
         if len(errors) == 0:
             self.persons.append(person)
 
-    def isValidToInclude(self, person:Person) -> List[str]:
-        erros = list()
-        if not self.is_name_valid(person.name):
-            erros.append("Name is invalid")
-        if not self.is_age_valid(person.age):
-            erros.append("Age is invalid")
-        if not self.person_has_email(person.emails):
-            erros.append("Person must have at least one email")
-        for email in person.emails:
-            if not self.is_email_valid(email.name):
-                erros.append("Email is invalid, it must be in the format example:rodrigo@gmail.com")
-        print(erros)
-        return erros
+    def isValidToInclude(self, person: Person) -> List[str]:
+        if isinstance(person, Person):
+            errors = []
+            errors.extend(filter(None, (
+                "Name is invalid" if not self.is_name_valid(person.name) else None,
+                "Age is invalid" if not self.is_age_valid(person.age) else None,
+                "Person must have at least one email" if not self.person_has_email(person.emails) else None,
+                *(f"Email '{email.name}' is invalid, it must be in the format example: rodrigo@gmail.com" for email in person.emails if not self.is_email_valid(email.name))
+            )))
+            return errors
 
     def is_name_valid(self, name: str) -> bool:
         names = name.split()
